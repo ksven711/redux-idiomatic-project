@@ -1,22 +1,17 @@
-let nextTodoId = 0;
-export const addTodo = (text) => {
-  return {
+import { v4 } from 'node-uuid';
+
+export const addTodo = (text) => ({
     type: 'ADD_TODO',
-    id: (nextTodoId++).toString(),
-    text,
-  };
-};
+    id: v4(),
+    text
+});
 
-export const setVisibilityFilter = (filter) => {
-  return {
+export const setVisibilityFilter = (filter) => ({
     type: 'SET_VISIBILITY_FILTER',
-    filter,
-  };
-};
+    filter
+});
 
-export const toggleTodo = (id) => {
-  return {
+export const toggleTodo = (id) => ({
     type: 'TOGGLE_TODO',
-    id,
-  };
-};
+    id
+});
