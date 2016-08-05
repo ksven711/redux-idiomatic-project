@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { toggleTodo } from '../actions';
+import { toggleTodo, receiveTodos } from '../actions';
 import TodoList from './TodoList';
 import { getVisibleTodos } from '../reducers/index';
 import { fetchTodos } from '../api/index';
@@ -9,17 +9,20 @@ import { fetchTodos } from '../api/index';
 class VisibleTodoList extends Component {
 
   componentDidMount() {
-    fetchTodos(this.props.filter).then(todos =>
-      window.console.log(this.props.filter, todos)
-    );
+    this.fetchData();
   }
 
   componentDidUpdate(prevProps) {
     if(this.props.filter !== prevProps.filter) {
-      fetchTodos(this.props.filter).then(todos =>
-          window.console.log(this.props.filter, todos)
-      );
+      this.fetchData();
     }
+  }
+
+  fetchData() {
+    const { filter, receiveTodos} = this.props;
+    fetchTodos(filter).then(todos =>
+        receiveTodos(filter, todos)
+    );
   }
 
   render() {
@@ -40,6 +43,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onTodoClick: (id) => {
       dispatch(toggleTodo(id));
+    },
+    receiveTodos: (filter, todos) => {
+      dispatch(receiveTodos(filter, todos));
     }
   };
 };
