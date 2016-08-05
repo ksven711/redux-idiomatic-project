@@ -1,5 +1,5 @@
 import todoApp from './reducers';
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
 
 /*const persistedState = {
  todos: [{
@@ -17,7 +17,11 @@ import { createStore } from 'redux';
 
 const configureStore = () => {
     const store = createStore(
-        todoApp
+        todoApp,
+        {},
+        compose(
+            window.devToolsExtension ? window.devToolsExtension() : f => f
+        )
     );
     return store;
 };
