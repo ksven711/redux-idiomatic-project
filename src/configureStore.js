@@ -14,17 +14,23 @@ import { createStore, compose } from 'redux';
  persistedState
  );*/
 
-const addPromiseSupportToDispatch = (store) => {
-    const rawDispatch = store.dispatch;
-    return (action) => {
-        if(typeof action.then === 'function') {
-            return action.then(rawDispatch);
-        }
-        return rawDispatch(action);
+const promise = (store) => (next) => (action) => {
+    if (typeof action.then === 'function') {
+        return action.then(next);
     }
+    return next(action);
+};
+
+const wrapDispatchWithMiddlewares = (store, middlewares) => {
+    middlewares.slice().reverse().forEach(middleware =>
+        store.dispatch = middleware(store)(store.dispatch)
+    );
 };
 
 const configureStore = () => {
+
+    const middlewares = [promise];
+
     const store = createStore(
         todoApp,
         {},
@@ -33,7 +39,7 @@ const configureStore = () => {
         )
     );
 
-    store.dispatch = addPromiseSupportToDispatch(store);
+    wrapDispatchWithMiddlewares(store, middlewares);
 
     return store;
 };
