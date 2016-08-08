@@ -1,7 +1,11 @@
 import todoApp from './reducers';
 import { createStore, compose, applyMiddleware } from 'redux';
-import promise from 'redux-promise';
 
+
+const thunk = (store) => (next) => (action) =>
+    typeof action === 'function' ?
+        action(store.dispatch) :
+        next(action);
 
 /*const persistedState = {
  todos: [{
@@ -19,7 +23,7 @@ import promise from 'redux-promise';
 /*const promise = (store) => (next) => (action) => {
     if (typeof action.then === 'function') {
         return action.then(next);
-    }
+ }
     return next(action);
 };*/
 
@@ -33,7 +37,7 @@ const wrapDispatchWithMiddlewares = (store, middlewares) => {
 
 const configureStore = () => {
 
-    const middleware = [promise];
+    const middleware = [thunk];
 
     return createStore(
         todoApp,
