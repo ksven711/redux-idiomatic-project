@@ -1,11 +1,6 @@
 import todoApp from './reducers';
 import { createStore, compose, applyMiddleware } from 'redux';
-
-
-const thunk = (store) => (next) => (action) =>
-    typeof action === 'function' ?
-        action(store.dispatch) :
-        next(action);
+import thunk from 'redux-thunk';
 
 /*const persistedState = {
  todos: [{

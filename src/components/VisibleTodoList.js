@@ -19,7 +19,7 @@ class VisibleTodoList extends Component {
 
   fetchData() {
     const { filter, fetchTodos} = this.props;
-    fetchTodos(filter);
+    fetchTodos(filter).then(() => window.console.log('done!'));
   }
 
   render() {
